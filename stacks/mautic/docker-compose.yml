@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+   db:
+     image:   
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
+       MYSQL_DATABASE: mautic
+
+   mautic:
+     image: mautic/mautic:latest 
+     volumes:
+       - mautic_data:/var/www/html
+     ports:
+       - 80
+     restart: always
+     environment:
+       MAUTIC_DB_HOST: db:3306
+       MAUTIC_DB_USER: root
+       MAUTIC_DB_PASSWORD: ${MAUTIC_DB_PASSWORD}
+       MAUTIC_DB_NAME: mautic
+       MAUTIC_RUN_CRON_JOBS: true
+       MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+
+volumes:
+    db_data:
+    mautic_data:
